@@ -8,35 +8,24 @@
 
 #define TIME_STEP 64
 
+// Definicao da funcao delay
+void delay (int time_milisec) {
+  double currentTime, initTime, Timeleft;
+  double timeValue = (double)time_milisec/1000;
+  initTime = wb_robot_get_time();
+  Timeleft = 0.00;
+  while (Timeleft < timeValue)
+  {
+    currentTime = wb_robot_get_time();
+    Timeleft = currentTime - initTime;
+    wb_robot_step(TIME_STEP);
+  }
+}
+
+
 // Funcao auxiliar para converter graus em radianos
 double toRadians(double degrees) {
   return degrees * M_PI / 180.0;
-}
-
-void inverseKinematics(double x3, double y3, double z3, double* theta) {
-  // const double L1 = 0.35, L2 = 0.3, L3 = 0.2;
-  
-  const double L1 = 0.01, L2 = 0.1, L3 = 0.3;
-  //const double L1 = 0.2, L2 = 0.2, L3 = 0.2;
-  // const double L1 = 2, L2 = 2, L3 = 2;
-  
-  double r1 = sqrt(pow(x3,2) + pow(y3,2));
-  double r2 = z3 - L1;
-  double r3 = sqrt(pow(r1,2) + pow(r2,2));
-  
-  printf("r1: %f, r2: %f, r3: %f\n", r1, r2, r3);
-  
-  double theta1 = atan(y3/x3);
-  double theta2 = atan(r2/r1) - 
-    acos((pow(L3,2) - pow(L2,2) - pow(r3,2)) / (-2*L2*r3));
-   
-  double theta3 = toRadians(180) -
-    acos((pow(r3,2) - pow(L2,2) - pow(L3,2)) / (-2*L2*L3));
-  printf("Theta1: %f\n", theta1);
-  printf("Theta2: %f\n", theta2);
-  theta[0] = theta1;
-  theta[1] = theta2;
-  theta[2] = theta3;
 }
 
 double validInterval(double value, double min, double max) {
@@ -44,6 +33,32 @@ double validInterval(double value, double min, double max) {
   if (value > max) return max;
   
   return value;
+}
+
+void inverseKinematics(double x3, double y3, double z3, double* theta) {
+  double L1 = 0.5, L2 = 2, L3 = 2;
+  
+  double r1 = sqrt(pow(x3,2) + pow(y3,2));
+  double r2 = z3 - L1;
+  double r3 = sqrt(pow(r1,2) + pow(r2,2));
+  
+  printf("r1: %f, r2: %f, r3: %f\n", r1, r2, r3);
+  printf("cosPhi1: %f\n", (pow(L3,2) - pow(L2,2) - pow(r3,2)) / (-2*L2*r3));
+  
+  double cosPhi1 = (pow(L3,2) - pow(L2,2) - pow(r3,2)) / (-2*L2*r3);
+  double theta1 = atan(y3/x3);
+  double theta2 = atan(r2/r1) - acos(validInterval(cosPhi1, -1, 1));
+   
+  printf("cosPhi3: %f\n", (pow(r3,2) - pow(L2,2) - pow(L3,2)) / (-2*L2*L3));
+  
+  double cosPhi3 = (pow(r3,2) - pow(L2,2) - pow(L3,2)) / (-2*L2*L3);
+  double theta3 = toRadians(180) - acos(validInterval(cosPhi3, -1, 1));
+  printf("Theta1: %f\n", theta1);
+  printf("Theta2: %f\n", theta2);
+  printf("Theta3: %f\n", theta3);
+  theta[0] = theta1;
+  theta[1] = theta2;
+  theta[2] = theta3;
 }
 
 double toPositiveAngle(double radians) {
@@ -67,15 +82,14 @@ int main(int argc, char **argv) {
     wb_motor_set_velocity(motors[i], 1.0);
     
   double positions[][3] = {
-    // {0.3, 0.0, 0.0}
-    // {0.001, -0.3, 0.0}
-    // {0.001, 0.3, 0.5}
-    {0.001, -0.2, 0.48}
+    {0.001, 0.3, 0.5}, 
+    {0.3, 0.0, 0.3},
+    {0.001, -0.2, 0.5}
   };
   
   double theta[3] = { 0.0, 0.0, 0.0 };
   
-  for(int i = 0; i < 1; i++) {
+  for(int i = 0; i < 3; i++) {
     double* position = positions[i];
   
     inverseKinematics(position[0], position[1], position[2], theta);
@@ -90,8 +104,13 @@ int main(int argc, char **argv) {
     wb_motor_set_position(motors[0], theta1);
     wb_motor_set_position(motors[1], theta2);
     wb_motor_set_position(motors[2], theta3);
+    
+    delay(5000);
   }
-
+  
+  wb_motor_set_position(motors[0], 0);
+  wb_motor_set_position(motors[1], 0);
+  wb_motor_set_position(motors[2], 0);
 
   wb_robot_cleanup();
 

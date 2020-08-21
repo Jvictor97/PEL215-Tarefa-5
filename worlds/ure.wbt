@@ -19,8 +19,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.6016973609004519 0.7437488334131643 0.29120089059271215 5.042713789264125
-  position -1.2901244725516188 2.147789350598895 1.0414914698344648
+  orientation 0.6252173375605797 -0.7333128225598333 -0.2671246620643449 5.339713931236035
+  position 0.6575804731223519 1.0570481333941149 0.7319501487900122
   exposure 1.7
 }
 IprHd6ms180 {
@@ -136,7 +136,7 @@ ConveyorBelt {
   textureAnimation 0.016
 }
 ConveyorBelt {
-  translation 0 0 -0.69
+  translation 0 0 -1.06
   name "conveyor belt(1)"
   size 13 0.25 0.5
   appearance CorrugatedMetal {
@@ -151,7 +151,7 @@ ConveyorBelt {
   textureAnimation 0.016
 }
 Solid {
-  translation 0.3 0.1 0
+  translation 0.3 0.3 0
   children [
     Shape {
       appearance PBRAppearance {
@@ -165,7 +165,7 @@ Solid {
   ]
 }
 Solid {
-  translation 0.001 0.48 0.2
+  translation 0.001 0.5 0.2
   children [
     Shape {
       appearance PBRAppearance {
@@ -180,7 +180,7 @@ Solid {
   name "solid(2)"
 }
 Solid {
-  translation 0.001 0.5 -0.3
+  translation 0.001 0.5 -0.2
   children [
     Shape {
       appearance PBRAppearance {
