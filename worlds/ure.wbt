@@ -19,9 +19,13 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.8783635991695774 0.4472883317152859 0.16855425229053778 5.453881358867816
-  position -0.5626030591323151 1.5226153802324844 1.0178117245150018
+  orientation 0.6016973609004519 0.7437488334131643 0.29120089059271215 5.042713789264125
+  position -1.2901244725516188 2.147789350598895 1.0414914698344648
   exposure 1.7
+}
+IprHd6ms180 {
+  translation 0 0 0
+  controller "my_controller"
 }
 TexturedBackground {
   texture "factory"
@@ -30,10 +34,6 @@ Floor {
   size 17 5
   appearance ThreadMetalPlate {
   }
-}
-IprHd6m180 {
-  translation 0 0 0
-  controller "my_controller"
 }
 Cabinet {
   translation -0.4 0 -2.47
@@ -149,4 +149,48 @@ ConveyorBelt {
   acceleration 0
   timer 90
   textureAnimation 0.016
+}
+Solid {
+  translation 0.3 0.1 0
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 1 0 0
+      }
+      geometry Sphere {
+        radius 0.0325
+        subdivision 4
+      }
+    }
+  ]
+}
+Solid {
+  translation 0.001 0.48 0.2
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 1 0 0
+      }
+      geometry Sphere {
+        radius 0.0325
+        subdivision 4
+      }
+    }
+  ]
+  name "solid(2)"
+}
+Solid {
+  translation 0.001 0.5 -0.3
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 1 0 0
+      }
+      geometry Sphere {
+        radius 0.0325
+        subdivision 4
+      }
+    }
+  ]
+  name "solid(1)"
 }

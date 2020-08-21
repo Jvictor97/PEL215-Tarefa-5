@@ -140,7 +140,7 @@ int main(int argc, char **argv) {
   ur_motors[5] = wb_robot_get_device("wrist_3_joint");
   
   // Configura a velocidade dos motores
-  for (i = 0; i < 6; ++i)
+  for (int i = 0; i < 6; ++i)
     wb_motor_set_velocity(ur_motors[i], speed);
 
   // Estima a posicao final do robo com base na inicial
